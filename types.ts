@@ -6,7 +6,7 @@ export type Data = string | GenericData | FormData;
 
 export type DFetchConfig = {
   headers?: GenericData<string>;
-  params?: GenericData<string | number | boolean | undefined>;
+  params?: GenericData;
   timeout?: number;
   redirect?: RequestRedirect;
 }
