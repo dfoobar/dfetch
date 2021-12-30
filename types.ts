@@ -2,7 +2,7 @@ type GenericData<T = unknown> = {
   [key: string]: T
 }
 
-export type Data = string | GenericData | FormData;
+export type Data = string | GenericData | FormData | GenericData[] ;
 
 export type DFetchConfig = {
   headers?: GenericData<string>;
