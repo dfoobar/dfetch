@@ -14,7 +14,7 @@ export type DFetchConfig = {
 export type DFetchRequestConfig = DFetchConfig & {
   url?: string;
   baseURL?: string;
-  method?: HttpMethods | `${HttpMethods}`;
+  method?: HttpMethods | `${HttpMethods}` | Uppercase<`${HttpMethods}`> | Capitalize<`${HttpMethods}`> ;
   data?: Data;
 }
 
