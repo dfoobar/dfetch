@@ -1,11 +1,10 @@
-
-import type { DFetchRequestConfig, DFetchConfig, DFetchResponseType, Data } from './types.ts';
+import type { DFetchRequestConfig, DFetchResponseType, Data } from './types.ts';
 import { HttpMethods } from './types.ts';
 import { initURL, initFetchConfig, setFetchTimeout } from './utils.ts';
 
 export default class DFetch {
 
-  constructor(private _config: DFetchConfig = {}) {}
+  constructor(private _config: DFetchRequestConfig = {}) {}
 
   static async #request<T = unknown>(config: DFetchRequestConfig): Promise<DFetchResponseType<T>>{
     const url = initURL(config);
