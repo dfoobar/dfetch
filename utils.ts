@@ -42,7 +42,7 @@ export function initURL(config: DFetchRequestConfig) {
   const _url = new URL(baseURL ? urlJoin(baseURL, url) : url);
 
   params && Object.entries(params)
-    .map(([key, value]) => [encodeURIComponent(key), encodeURIComponent(value)])
+    .map(([key, value]) => [encodeURIComponent(key), encodeURIComponent(value as string)])
     .forEach(([key, value]) => _url.searchParams.append(key, value));
 
   return _url;
