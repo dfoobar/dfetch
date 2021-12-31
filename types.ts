@@ -1,14 +1,12 @@
-type GenericData<T = unknown> = {
-  [key: string]: T
-}
 
-export type Data = string | GenericData | FormData | GenericData[] | unknown;
+export type Data = string | Record<string, unknown> | FormData | Record<string, unknown>[];
 
 export type DFetchConfig = {
-  headers?: GenericData<string>;
-  params?: GenericData;
+  headers?: Record<string, string>;
+  params?: Record<string, unknown>;
   timeout?: number;
   redirect?: RequestRedirect;
+  paramsSerializer?: Function;
 }
 
 export type DFetchRequestConfig = DFetchConfig & {
