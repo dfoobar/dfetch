@@ -6,19 +6,7 @@ const isSuitableData = (data: Data): data is string | FormData | URLSearchParams
   data instanceof FormData ||
   data instanceof URLSearchParams;
 
-function setHeaders(headers: { [key: string]: string; }, fetchConfig: RequestInit) {
-  if(headers) {
-    const _headers: Headers = new Headers();
-    Object.keys(headers).forEach((header) => {
-      if(headers && headers[header]) {
-        _headers.set(header, headers[header]);
-      }
-    });
-    fetchConfig.headers = _headers;
-  }
-}
-
-function setData(data: Data | undefined, fetchConfig: RequestInit, headers: { [key: string]: string; }) {
+function setData(fetchConfig: RequestInit, headers: Record<string, string>, data?: Data) {
   if(data && fetchConfig.method !== "get") {
     if(isSuitableData(data)) {
       fetchConfig.body = data;
@@ -30,20 +18,29 @@ function setData(data: Data | undefined, fetchConfig: RequestInit, headers: { [k
       } catch(ex) { }
     }
   }
-}
+}  
 
 export function initURL(config: DFetchRequestConfig) {
   const {
     url = "/",
     baseURL,
-    params
+    params,
+    paramsSerializer
   } = config;
+  
+  const urlString = baseURL ? urlJoin(baseURL, url) : url;
+  let _url: URL = new URL(urlString);
 
-  const _url = new URL(baseURL ? urlJoin(baseURL, url) : url);
+  if (!params) return _url;
 
-  params && Object.entries(params)
-    .map(([key, value]) => [encodeURIComponent(key), encodeURIComponent(value as string)])
-    .forEach(([key, value]) => _url.searchParams.append(key, value));
+  if (paramsSerializer) {
+    _url = new URL(urlJoin(urlString, `?${paramsSerializer(params)}`))
+  } else {
+    Object.entries(params)
+      .filter(([,value]) => value !== undefined)
+      .map(([key, value]) => [encodeURIComponent(key), encodeURIComponent(value as string)])
+      .forEach(([key, value]) => _url.searchParams.append(key, value));
+  }
 
   return _url;
 }
@@ -60,8 +57,12 @@ export function initFetchConfig(config: DFetchRequestConfig) {
     method: !method ? "get" : method,
     redirect: redirect || undefined
   };
-  setData(data, fetchConfig, headers);
-  setHeaders(headers, fetchConfig);
+  
+  setData(fetchConfig, headers, data);
+
+  fetchConfig.headers = Object.entries(headers)
+    .reduce((h, [k, v]) => (h.set(k, v), h), new Headers());
+    
   return fetchConfig;
 }
 
