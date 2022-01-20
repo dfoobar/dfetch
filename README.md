@@ -22,7 +22,7 @@ DFetch.get("https://google.es").then((response) => {
 You can use type generics with dfetch
 
 ```typescript
-import DFetch from "https://deno.land/xDFfetch/mod.ts";
+import DFetch from "https://deno.land/x/dfetch/mod.ts";
 
 const { data } = await DFetch<{ delay: string }>(
   "https://postman-echo.com/delay/2"
