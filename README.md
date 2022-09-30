@@ -1,4 +1,4 @@
-# dfecth
+# dfetch
 
 Promise based HTTP client for Deno inspired by [axios](https://www.npmjs.com/package/axios).
 
